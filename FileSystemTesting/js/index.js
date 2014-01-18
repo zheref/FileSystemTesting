@@ -46,5 +46,33 @@ var app = {
         receivedElement.setAttribute('style', 'display:block;');
 
         console.log('Received Event: ' + id);
+        
+        this.follow();
+    },
+    
+    log: function(text) {
+        var d = new Date();
+        var ds = "(" + d.getTime() + ") " + d.toLocaleTimeString();
+        document.getElementById('logger').innerHTML += ds + ": " + text + "<br>";
+        console.log(ds + ": " + text);
+    },
+    
+    follow: function() {
+        this.readFS();
+    },
+    
+    readFS: function() {
+        var that = this;
+        
+        that.log("Trying to open FileSystem...");
+        
+        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs) {
+            that.log("FileSystem has been open succesfuly");
+            that.log(fs.name);
+            that.log(fs.root.name);
+            that.log(fs.root.fullPath);
+        }, function(error) {
+            that.log("Failed to open FileSystem because: " + error.code);
+        });
     }
 };
